@@ -36,16 +36,33 @@ class venue:
         self.address = input.contents[2].text
         self.website = input.contents[1].a["href"]
 
+class event: 
+    def __init__(self,input,column):
+        self.text = input
+        self.column = column
+        self.day = days[column-4]
+        temp = input.split()
+        index = temp.index("p.m.")
+        self.time = temp[index-1] + ' ' + temp[index]
+
 def main():
     soup = BeautifulSoup(crawl())
     raw = []
     venues = []
+    events = []
+    days = []
+    week = soup.thead.contents[1]
+    for each in range(4,len(week)-1):
+        days.append(week.contents[each].text)
     for each in soup.tbody.children:
         raw.append(each)
     raw = raw[1::2]
     raw[0].contents.insert(0,0) #Stupid web designers have unique first row...
     for each in raw:
         venues.append(venue(each))
-        
+    for each in raw:
+        for all in range(4,len(raw[0])-1):
+            if each.contents[all].text != '':
+                events.append(event(each.contents[all].text,all))
  
     
