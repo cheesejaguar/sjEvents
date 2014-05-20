@@ -2,7 +2,7 @@ import httplib
 import re
 from bs4 import BeautifulSoup
 
-import twitter
+#import twitter
 
 my_consumer_key = ''
 my_consumer_secret = ''
@@ -32,9 +32,9 @@ def crawl():
 
 class venue:
     def __init__(self,input):
-        self.name = input.contents[1].text
-        self.address = input.contents[2].text
-        self.website = input.contents[1].a["href"]
+        self.name = input.contents[2].text
+        self.address = input.contents[4].text
+        self.website = input.contents[2].a["href"]
 
 class event: 
     def __init__(self,input,column):
@@ -59,10 +59,12 @@ def main():
     raw = raw[1::2]
     raw[0].contents.insert(0,0) #Stupid web designers have unique first row...
     for each in raw:
+        print(venue(each))
         venues.append(venue(each))
     for each in raw:
         for all in range(4,len(raw[0])-1):
             if each.contents[all].text != '':
                 events.append(event(each.contents[all].text,all))
- 
+    for each in events:
+        print events[each]
     
